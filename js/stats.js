@@ -1,6 +1,9 @@
-function getWorkouts() {
-  const data = localStorage.getItem("workouts");
-  return data ? JSON.parse(data) : [];
+const API_URL = "http://localhost:3000";
+
+async function getWorkouts() {
+  const response = await fetch(`${API_URL}/workouts`);
+  const data = await response.json();
+  return data;
 }
 
 function calculateTotals(workouts) {
@@ -17,8 +20,8 @@ function calculateTotals(workouts) {
   return { totalWorkouts, totalSets, totalReps };
 }
 
-function renderStatsSummary() {
-  const workouts = getWorkouts();
+async function renderStatsSummary() {
+  const workouts = await getWorkouts();
   const totals = calculateTotals(workouts);
 
   document.getElementById("total-workouts-value").textContent =
