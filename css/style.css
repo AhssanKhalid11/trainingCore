@@ -351,3 +351,51 @@ body {
   line-height: 1;
   padding: 4px;
 }
+
+/* generate rand work out btn */
+.random-workout-section {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 32px 48px;
+  text-align: center;
+}
+
+.random-workout-btn {
+  background-color: var(--color-accent);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--radius-base);
+  cursor: pointer;
+  transition: background-color var(--transition-base);
+}
+
+.random-workout-btn:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.random-workout-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.random-workout-item {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: 14px 18px;
+}
+
+.random-workout-item-name {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.random-workout-item-details {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
