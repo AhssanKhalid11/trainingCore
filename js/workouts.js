@@ -8,6 +8,9 @@ const exerciseSetsInput = document.getElementById("exercise-sets");
 const exerciseRepsInput = document.getElementById("exercise-reps");
 const exerciseWeightInput = document.getElementById("exercise-weight");
 
+const randomWorkoutBtn = document.getElementById("random-workout-btn");
+const randomWorkoutList = document.getElementById("random-workout-list");
+
 let editingWorkoutId = null;
 
 async function getWorkouts() {
@@ -36,6 +39,12 @@ async function deleteWorkout(id) {
   await fetch(`${API_URL}/workouts/${id}`, {
     method: "DELETE",
   });
+}
+
+async function getRandomExercises() {
+  const response = await fetch(`${API_URL}/exercises/random?count=5`);
+  const data = await response.json();
+  return data;
 }
 
 async function renderWorkouts() {
@@ -81,6 +90,29 @@ async function renderWorkouts() {
     listItem.appendChild(actionsDiv);
 
     workoutList.appendChild(listItem);
+  });
+}
+
+async function renderRandomWorkout() {
+  const exercises = await getRandomExercises();
+  randomWorkoutList.innerHTML = "";
+
+  exercises.forEach((exercise) => {
+    const listItem = document.createElement("li");
+    listItem.classList.add("random-workout-item");
+
+    const nameEl = document.createElement("div");
+    nameEl.classList.add("random-workout-item-name");
+    nameEl.textContent = exercise.name;
+
+    const detailsEl = document.createElement("div");
+    detailsEl.classList.add("random-workout-item-details");
+    detailsEl.textContent = `${exercise.muscle_group} - ${exercise.difficulty}`;
+
+    listItem.appendChild(nameEl);
+    listItem.appendChild(detailsEl);
+
+    randomWorkoutList.appendChild(listItem);
   });
 }
 
@@ -144,5 +176,6 @@ async function handleListClick(event) {
 
 workoutForm.addEventListener("submit", handleFormSubmit);
 workoutList.addEventListener("click", handleListClick);
+randomWorkoutBtn.addEventListener("click", renderRandomWorkout);
 
 renderWorkouts();
