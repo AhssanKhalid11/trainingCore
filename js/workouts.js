@@ -1,3 +1,5 @@
+const API_URL = "http://localhost:3000";
+
 const workoutForm = document.getElementById("workout-form");
 const workoutList = document.getElementById("workout-list");
 
@@ -8,17 +10,36 @@ const exerciseWeightInput = document.getElementById("exercise-weight");
 
 let editingWorkoutId = null;
 
-function getWorkouts() {
-  const data = localStorage.getItem("workouts");
-  return data ? JSON.parse(data) : [];
+async function getWorkouts() {
+  const response = await fetch(`${API_URL}/workouts`);
+  const data = await response.json();
+  return data;
 }
 
-function saveWorkouts(workouts) {
-  localStorage.setItem("workouts", JSON.stringify(workouts));
+async function createWorkout(workout) {
+  await fetch(`${API_URL}/workouts`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(workout),
+  });
 }
 
-function renderWorkouts() {
-  const workouts = getWorkouts();
+async function updateWorkout(id, workout) {
+  await fetch(`${API_URL}/workouts/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(workout),
+  });
+}
+
+async function deleteWorkout(id) {
+  await fetch(`${API_URL}/workouts/${id}`, {
+    method: "DELETE",
+  });
+}
+
+async function renderWorkouts() {
+  const workouts = await getWorkouts();
   workoutList.innerHTML = "";
 
   workouts.forEach((workout) => {
@@ -63,7 +84,7 @@ function renderWorkouts() {
   });
 }
 
-function handleFormSubmit(event) {
+async function handleFormSubmit(event) {
   event.preventDefault();
 
   const isNameValid = validateExerciseName(exerciseNameInput);
@@ -75,50 +96,40 @@ function handleFormSubmit(event) {
     return;
   }
 
-  const workouts = getWorkouts();
+  const workoutData = {
+    name: exerciseNameInput.value.trim(),
+    sets: exerciseSetsInput.value,
+    reps: exerciseRepsInput.value,
+    weight: exerciseWeightInput.value,
+  };
 
   if (editingWorkoutId) {
-    const workoutToUpdate = workouts.find((w) => w.id === editingWorkoutId);
-    workoutToUpdate.name = exerciseNameInput.value.trim();
-    workoutToUpdate.sets = exerciseSetsInput.value;
-    workoutToUpdate.reps = exerciseRepsInput.value;
-    workoutToUpdate.weight = exerciseWeightInput.value;
-
+    await updateWorkout(editingWorkoutId, workoutData);
     editingWorkoutId = null;
     workoutForm.querySelector(".form-submit-btn").textContent = "Add Workout";
   } else {
-    const newWorkout = {
-      id: Date.now().toString(),
-      name: exerciseNameInput.value.trim(),
-      sets: exerciseSetsInput.value,
-      reps: exerciseRepsInput.value,
-      weight: exerciseWeightInput.value,
-    };
-
-    workouts.push(newWorkout);
+    await createWorkout(workoutData);
   }
 
-  saveWorkouts(workouts);
-  renderWorkouts();
+  await renderWorkouts();
   workoutForm.reset();
 }
 
-function handleListClick(event) {
+async function handleListClick(event) {
   const action = event.target.getAttribute("data-action");
   if (!action) return;
 
   const listItem = event.target.closest(".workout-card");
   const workoutId = listItem.getAttribute("data-id");
-  const workouts = getWorkouts();
 
   if (action === "delete") {
-    const updatedWorkouts = workouts.filter((w) => w.id !== workoutId);
-    saveWorkouts(updatedWorkouts);
-    renderWorkouts();
+    await deleteWorkout(workoutId);
+    await renderWorkouts();
   }
 
   if (action === "edit") {
-    const workoutToEdit = workouts.find((w) => w.id === workoutId);
+    const workouts = await getWorkouts();
+    const workoutToEdit = workouts.find((w) => w.id == workoutId);
 
     exerciseNameInput.value = workoutToEdit.name;
     exerciseSetsInput.value = workoutToEdit.sets;
