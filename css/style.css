@@ -284,3 +284,61 @@ body {
 .form-input--invalid {
   border-color: #e5484d;
 }
+
+/* stats page */
+.stats-summary-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 32px 0;
+}
+
+.stats-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.stats-summary-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: 24px;
+}
+
+.stats-summary-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-accent);
+}
+
+.stats-summary-label {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.stats-chart-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+.stats-chart-container {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: 32px;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-chart-placeholder-text {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  text-align: center;
+}
