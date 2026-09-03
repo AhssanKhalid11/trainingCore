@@ -1,5 +1,7 @@
 const API_URL = "http://localhost:3000";
 
+const ACHIEVEMENT_MILESTONES = [50, 100, 250, 500];
+
 async function getWorkouts() {
   const response = await fetch(`${API_URL}/workouts`);
   const data = await response.json();
@@ -20,16 +22,74 @@ function calculateTotals(workouts) {
   return { totalWorkouts, totalSets, totalReps };
 }
 
-async function renderStatsSummary() {
-  const workouts = await getWorkouts();
-  const totals = calculateTotals(workouts);
+function calculateRepsPerExercise(workouts) {
+  const repsPerExercise = {};
 
-  document.getElementById("total-workouts-value").textContent =
-    totals.totalWorkouts;
-  document.getElementById("total-sets-value").textContent = totals.totalSets;
-  document.getElementById("total-reps-value").textContent = totals.totalReps;
+  workouts.forEach((workout) => {
+    const exerciseName = workout.name.trim().toLowerCase();
+    const totalRepsForThisEntry = Number(workout.sets) * Number(workout.reps);
 
-  renderProgressChart(workouts);
+    if (!repsPerExercise[exerciseName]) {
+      repsPerExercise[exerciseName] = 0;
+    }
+
+    repsPerExercise[exerciseName] += totalRepsForThisEntry;
+  });
+
+  return repsPerExercise;
+}
+
+function buildAchievementsList(repsPerExercise) {
+  const achievements = [];
+
+  Object.keys(repsPerExercise).forEach((exerciseName) => {
+    const totalReps = repsPerExercise[exerciseName];
+
+    ACHIEVEMENT_MILESTONES.forEach((milestone) => {
+      achievements.push({
+        exerciseName: exerciseName,
+        milestone: milestone,
+        totalReps: totalReps,
+        unlocked: totalReps >= milestone,
+      });
+    });
+  });
+
+  return achievements;
+}
+
+function renderAchievements(achievements) {
+  const achievementsGrid = document.getElementById("achievements-grid");
+  achievementsGrid.innerHTML = "";
+
+  achievements.forEach((achievement) => {
+    const card = document.createElement("div");
+    card.classList.add("achievement-card");
+
+    if (achievement.unlocked) {
+      card.classList.add("achievement-card--unlocked");
+    }
+
+    const icon = document.createElement("div");
+    icon.classList.add("achievement-card-icon");
+    icon.textContent = achievement.unlocked ? "🏆" : "🔒";
+
+    const title = document.createElement("div");
+    title.classList.add("achievement-card-title");
+    title.textContent = `${achievement.milestone} ${achievement.exerciseName}`;
+
+    const description = document.createElement("div");
+    description.classList.add("achievement-card-description");
+    description.textContent = achievement.unlocked
+      ? "Unlocked"
+      : `${achievement.totalReps} / ${achievement.milestone} reps`;
+
+    card.appendChild(icon);
+    card.appendChild(title);
+    card.appendChild(description);
+
+    achievementsGrid.appendChild(card);
+  });
 }
 
 function renderProgressChart(workouts) {
@@ -75,6 +135,22 @@ function renderProgressChart(workouts) {
       },
     },
   });
+}
+
+async function renderStatsSummary() {
+  const workouts = await getWorkouts();
+  const totals = calculateTotals(workouts);
+
+  document.getElementById("total-workouts-value").textContent =
+    totals.totalWorkouts;
+  document.getElementById("total-sets-value").textContent = totals.totalSets;
+  document.getElementById("total-reps-value").textContent = totals.totalReps;
+
+  renderProgressChart(workouts);
+
+  const repsPerExercise = calculateRepsPerExercise(workouts);
+  const achievements = buildAchievementsList(repsPerExercise);
+  renderAchievements(achievements);
 }
 
 renderStatsSummary();
