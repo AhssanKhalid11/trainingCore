@@ -41,6 +41,35 @@ app.post("/workouts", (req, res) => {
   );
 });
 
+app.put("/workouts/:id", (req, res) => {
+  const { id } = req.params;
+  const { name, sets, reps, weight } = req.body;
+
+  db.run(
+    "UPDATE workouts SET name = ?, sets = ?, reps = ?, weight = ? WHERE id = ?",
+    [name, sets, reps, weight, id],
+    function (err) {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      res.json({ id, name, sets, reps, weight });
+    },
+  );
+});
+
+app.delete("/workouts/:id", (req, res) => {
+  const { id } = req.params;
+
+  db.run("DELETE FROM workouts WHERE id = ?", [id], function (err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({ message: "Workout deleted", id });
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
