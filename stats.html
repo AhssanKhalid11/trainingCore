@@ -19,12 +19,43 @@
       </nav>
     </header>
 
-    <main class="page-main"></main>
+    <main class="page-main">
+      <section class="stats-summary-section">
+        <h1 class="page-title">Your Progress</h1>
+
+        <div class="stats-summary-grid">
+          <div class="stats-summary-card">
+            <span class="stats-summary-value" id="total-workouts-value">0</span>
+            <span class="stats-summary-label">Total Workouts</span>
+          </div>
+
+          <div class="stats-summary-card">
+            <span class="stats-summary-value" id="total-sets-value">0</span>
+            <span class="stats-summary-label">Total Sets Logged</span>
+          </div>
+
+          <div class="stats-summary-card">
+            <span class="stats-summary-value" id="total-reps-value">0</span>
+            <span class="stats-summary-label">Total Reps Logged</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats-chart-section">
+        <h2 class="section-title">Progress Over Time</h2>
+        <div class="stats-chart-container" id="stats-chart-container">
+          <p class="stats-chart-placeholder-text">
+            No workout data yet. Log a workout to see your progress.
+          </p>
+        </div>
+      </section>
+    </main>
 
     <footer class="site-footer">
       <p>&copy; 2026 Training Core</p>
     </footer>
 
     <script src="js/main.js" defer></script>
+    <script src="js/stats.js" defer></script>
   </body>
 </html>
