@@ -60,3 +60,137 @@ body {
 .site-nav-link:hover {
   color: var(--color-accent);
 }
+
+/* workout page */
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--color-text);
+}
+
+.workout-form-section,
+.workout-list-section {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+.workout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: 32px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.form-input {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 1rem;
+  transition: border-color var(--transition-base);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.form-error-message {
+  font-size: 0.8rem;
+  color: #e5484d;
+  min-height: 16px;
+}
+
+.form-submit-btn {
+  background-color: var(--color-accent);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-base);
+  cursor: pointer;
+  transition: background-color var(--transition-base);
+}
+
+.form-submit-btn:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.workout-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.workout-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: 16px 20px;
+}
+
+.workout-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.workout-card-name {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.workout-card-details {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.workout-card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.workout-card-btn {
+  border: none;
+  border-radius: var(--radius-base);
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity var(--transition-base);
+}
+
+.workout-card-btn:hover {
+  opacity: 0.85;
+}
+
+.workout-card-edit-btn {
+  background-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.workout-card-delete-btn {
+  background-color: #e5484d;
+  color: #ffffff;
+}
