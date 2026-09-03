@@ -342,3 +342,12 @@ body {
   font-size: 0.95rem;
   text-align: center;
 }
+
+.theme-toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+}
