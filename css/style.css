@@ -61,8 +61,6 @@ body {
   color: var(--color-accent);
 }
 
-/* index page */
-
 .hero-section {
   text-align: center;
   padding: 96px 32px;
@@ -150,7 +148,6 @@ body {
   line-height: 1.5;
 }
 
-/* workout page */
 .page-title {
   font-size: 2rem;
   font-weight: 700;
@@ -282,4 +279,8 @@ body {
 .workout-card-delete-btn {
   background-color: #e5484d;
   color: #ffffff;
+}
+
+.form-input--invalid {
+  border-color: #e5484d;
 }
