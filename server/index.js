@@ -70,6 +70,32 @@ app.delete("/workouts/:id", (req, res) => {
   });
 });
 
+app.get("/exercises", (req, res) => {
+  db.all("SELECT * FROM exercises", [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows);
+  });
+});
+
+app.get("/exercises/random", (req, res) => {
+  const count = Number(req.query.count) || 5;
+
+  db.all(
+    "SELECT * FROM exercises ORDER BY RANDOM() LIMIT ?",
+    [count],
+    (err, rows) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      res.json(rows);
+    },
+  );
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
