@@ -2,10 +2,30 @@ const API_URL = "http://localhost:3000";
 
 const ACHIEVEMENT_MILESTONES = [50, 100, 250, 500];
 
+const apiErrorBanner = document.getElementById("api-error-banner");
+
+function showApiError() {
+  apiErrorBanner.hidden = false;
+}
+
+function hideApiError() {
+  apiErrorBanner.hidden = true;
+}
+
 async function getWorkouts() {
-  const response = await fetch(`${API_URL}/workouts`);
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch(`${API_URL}/workouts`);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch workouts");
+    }
+
+    hideApiError();
+    return await response.json();
+  } catch (error) {
+    showApiError();
+    return [];
+  }
 }
 
 function calculateTotals(workouts) {
@@ -102,6 +122,8 @@ function renderAchievements(achievements) {
   });
 }
 
+let progressChartInstance = null;
+
 function renderProgressChart(workouts) {
   const sortedWorkouts = [...workouts].reverse();
 
@@ -116,7 +138,11 @@ function renderProgressChart(workouts) {
 
   const canvas = document.getElementById("progress-chart");
 
-  new Chart(canvas, {
+  if (progressChartInstance) {
+    progressChartInstance.destroy();
+  }
+
+  progressChartInstance = new Chart(canvas, {
     type: "line",
     data: {
       labels: labels,
