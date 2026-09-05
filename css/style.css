@@ -576,3 +576,21 @@ body {
 .site-nav-link--active::before {
   transform: scale(1);
 }
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background-color: var(--color-accent);
+  color: #ffffff;
+  padding: 10px 16px;
+  border-radius: 0 0 var(--radius-base) 0;
+  z-index: 100;
+  text-decoration: none;
+  font-weight: 600;
+  transition: top var(--transition-base);
+}
+
+.skip-link:focus {
+  top: 0;
+}
