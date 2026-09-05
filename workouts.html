@@ -38,7 +38,7 @@
       <section class="workout-form-section">
         <h1 class="page-title">Your Workouts</h1>
 
-        <form class="workout-form" id="workout-form">
+        <form class="workout-form" id="workout-form" novalidate>
           <div class="form-group">
             <label for="exercise-name" class="form-label">Exercise Name</label>
             <input
@@ -47,8 +47,14 @@
               name="exerciseName"
               class="form-input"
               required
+              aria-describedby="exercise-name-error"
+              aria-invalid="false"
             />
-            <span class="form-error-message" id="exercise-name-error"></span>
+            <span
+              class="form-error-message"
+              id="exercise-name-error"
+              role="alert"
+            ></span>
           </div>
 
           <div class="form-group">
@@ -60,8 +66,14 @@
               class="form-input"
               min="1"
               required
+              aria-describedby="exercise-sets-error"
+              aria-invalid="false"
             />
-            <span class="form-error-message" id="exercise-sets-error"></span>
+            <span
+              class="form-error-message"
+              id="exercise-sets-error"
+              role="alert"
+            ></span>
           </div>
 
           <div class="form-group">
@@ -73,8 +85,14 @@
               class="form-input"
               min="1"
               required
+              aria-describedby="exercise-reps-error"
+              aria-invalid="false"
             />
-            <span class="form-error-message" id="exercise-reps-error"></span>
+            <span
+              class="form-error-message"
+              id="exercise-reps-error"
+              role="alert"
+            ></span>
           </div>
 
           <div class="form-group">
@@ -86,8 +104,14 @@
               class="form-input"
               min="0"
               step="0.5"
+              aria-describedby="exercise-weight-error"
+              aria-invalid="false"
             />
-            <span class="form-error-message" id="exercise-weight-error"></span>
+            <span
+              class="form-error-message"
+              id="exercise-weight-error"
+              role="alert"
+            ></span>
           </div>
 
           <button type="submit" class="form-submit-btn">Add Workout</button>
