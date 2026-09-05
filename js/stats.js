@@ -66,12 +66,22 @@ function renderAchievements(achievements) {
     const card = document.createElement("div");
     card.classList.add("achievement-card");
 
+    const statusText = achievement.unlocked
+      ? "Unlocked"
+      : `Locked, ${achievement.totalReps} of ${achievement.milestone} reps completed`;
+
+    card.setAttribute(
+      "aria-label",
+      `${achievement.milestone} ${achievement.exerciseName} achievement. ${statusText}`,
+    );
+
     if (achievement.unlocked) {
       card.classList.add("achievement-card--unlocked");
     }
 
     const icon = document.createElement("div");
     icon.classList.add("achievement-card-icon");
+    icon.setAttribute("aria-hidden", "true");
     icon.textContent = achievement.unlocked ? "🏆" : "🔒";
 
     const title = document.createElement("div");
