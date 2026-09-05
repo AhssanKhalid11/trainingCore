@@ -2,12 +2,14 @@ function showError(inputElement, errorElementId, message) {
   const errorElement = document.getElementById(errorElementId);
   errorElement.textContent = message;
   inputElement.classList.add("form-input--invalid");
+  inputElement.setAttribute("aria-invalid", "true");
 }
 
 function clearError(inputElement, errorElementId) {
   const errorElement = document.getElementById(errorElementId);
   errorElement.textContent = "";
   inputElement.classList.remove("form-input--invalid");
+  inputElement.setAttribute("aria-invalid", "false");
 }
 
 function validateExerciseName(inputElement) {
