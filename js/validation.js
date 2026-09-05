@@ -74,3 +74,12 @@ function validateWeight(inputElement) {
   clearError(inputElement, "exercise-weight-error");
   return true;
 }
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    validateExerciseName,
+    validateSets,
+    validateReps,
+    validateWeight,
+  };
+}
