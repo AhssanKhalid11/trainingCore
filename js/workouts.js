@@ -2,6 +2,7 @@ const API_URL = "http://localhost:3000";
 
 const workoutForm = document.getElementById("workout-form");
 const workoutList = document.getElementById("workout-list");
+const apiErrorBanner = document.getElementById("api-error-banner");
 
 const exerciseNameInput = document.getElementById("exercise-name");
 const exerciseSetsInput = document.getElementById("exercise-sets");
@@ -13,38 +14,102 @@ const randomWorkoutList = document.getElementById("random-workout-list");
 
 let editingWorkoutId = null;
 
+function showApiError() {
+  apiErrorBanner.hidden = false;
+}
+
+function hideApiError() {
+  apiErrorBanner.hidden = true;
+}
+
 async function getWorkouts() {
-  const response = await fetch(`${API_URL}/workouts`);
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch(`${API_URL}/workouts`);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch workouts");
+    }
+
+    hideApiError();
+    return await response.json();
+  } catch (error) {
+    showApiError();
+    return [];
+  }
 }
 
 async function createWorkout(workout) {
-  await fetch(`${API_URL}/workouts`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(workout),
-  });
+  try {
+    const response = await fetch(`${API_URL}/workouts`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(workout),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create workout");
+    }
+
+    hideApiError();
+    return true;
+  } catch (error) {
+    showApiError();
+    return false;
+  }
 }
 
 async function updateWorkout(id, workout) {
-  await fetch(`${API_URL}/workouts/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(workout),
-  });
+  try {
+    const response = await fetch(`${API_URL}/workouts/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(workout),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update workout");
+    }
+
+    hideApiError();
+    return true;
+  } catch (error) {
+    showApiError();
+    return false;
+  }
 }
 
 async function deleteWorkout(id) {
-  await fetch(`${API_URL}/workouts/${id}`, {
-    method: "DELETE",
-  });
+  try {
+    const response = await fetch(`${API_URL}/workouts/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete workout");
+    }
+
+    hideApiError();
+    return true;
+  } catch (error) {
+    showApiError();
+    return false;
+  }
 }
 
 async function getRandomExercises() {
-  const response = await fetch(`${API_URL}/exercises/random?count=5`);
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch(`${API_URL}/exercises/random?count=5`);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch random exercises");
+    }
+
+    hideApiError();
+    return await response.json();
+  } catch (error) {
+    showApiError();
+    return [];
+  }
 }
 
 async function renderWorkouts() {
@@ -135,16 +200,20 @@ async function handleFormSubmit(event) {
     weight: exerciseWeightInput.value,
   };
 
+  let success;
+
   if (editingWorkoutId) {
-    await updateWorkout(editingWorkoutId, workoutData);
+    success = await updateWorkout(editingWorkoutId, workoutData);
     editingWorkoutId = null;
     workoutForm.querySelector(".form-submit-btn").textContent = "Add Workout";
   } else {
-    await createWorkout(workoutData);
+    success = await createWorkout(workoutData);
   }
 
-  await renderWorkouts();
-  workoutForm.reset();
+  if (success) {
+    await renderWorkouts();
+    workoutForm.reset();
+  }
 }
 
 async function handleListClick(event) {
@@ -155,13 +224,17 @@ async function handleListClick(event) {
   const workoutId = listItem.getAttribute("data-id");
 
   if (action === "delete") {
-    await deleteWorkout(workoutId);
-    await renderWorkouts();
+    const success = await deleteWorkout(workoutId);
+    if (success) {
+      await renderWorkouts();
+    }
   }
 
   if (action === "edit") {
     const workouts = await getWorkouts();
     const workoutToEdit = workouts.find((w) => w.id == workoutId);
+
+    if (!workoutToEdit) return;
 
     exerciseNameInput.value = workoutToEdit.name;
     exerciseSetsInput.value = workoutToEdit.sets;
